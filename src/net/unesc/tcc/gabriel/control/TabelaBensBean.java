@@ -64,7 +64,7 @@ public class TabelaBensBean implements Serializable {
 	private void popularBens() {
 		ServicoBean servico = new ServicoBean();
 		try {
-			//benslist.addAll(servico.consultaTemporaria());
+			benslist.addAll(servico.consultaTemporaria());
 			//benslist.add(new Bem(new Dispositivo(2, "-28.6749125,-49.3630053,16z", "24/04/2014 20:54", true), 1,"BOI01"));
 			benslist.add(new Bem(new Dispositivo(3, "-28.6757785,-49.3650867,16z", "24/04/2014 20:54", true), 2,"BOI02"));
 			benslist.add(new Bem(new Dispositivo(1, "-28.677191,-49.367789,20z", "24/04/2014 20:54", false), 3,"BOI03"));

@@ -65,7 +65,7 @@ public class ServicoBean {
 		}
 		// CRUZA AS DUAS LISTAS E SALVA NA TABELA DE REGISTROS DE BENS DO BANCO MYSQL
 		for (Dispositivo d : listadispositivos) {
-			Bem b = new Bem(d, 1, "BOI NOVO");
+			Bem b = new Bem(d, 1, "BOI DO MEU VÔ");
 			listabens.add(b);
 		}
 		Banco.salvarB(listabens);
@@ -81,7 +81,7 @@ public class ServicoBean {
 		}
 		// CRUZA AS DUAS LISTAS E SALVA NA TABELA DE REGISTROS DE BENS DO BANCO MYSQL
 		for (Dispositivo d : listadispositivos) {
-			Bem b = new Bem(d, 1, "BOI NOVO");
+			Bem b = new Bem(d, 1, "BOI DO MEU VÔ");
 			listabens.add(b);
 		}
 		return listabens;
