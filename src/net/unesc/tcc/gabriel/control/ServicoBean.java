@@ -38,7 +38,7 @@ public class ServicoBean {
 					disp.setDt_ultima_consulta(new Date());
 					disp.setFirmware(no.getDeviceType().name());
 					disp.setOnline(true);
-					disp.setDs_coordenadas("-28.6749125,-49.3630053,16z");
+					disp.setDs_coordenadas("-28.6749125,-49.3630053");
 					listadispositivos.add(disp);
 				}
 				Banco.salvarD(listadispositivos);

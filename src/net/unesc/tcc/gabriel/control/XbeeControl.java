@@ -1,5 +1,6 @@
 package net.unesc.tcc.gabriel.control;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import org.apache.log4j.Logger;
@@ -72,7 +73,11 @@ public class XbeeControl {
 				}
 			}
 		} finally {
+			xbee.clearResponseQueue();
 			xbee.close();
+			if (xbee.isConnected()){
+				xbee.close();
+			}
 		}
 		return retorno;
 	}

@@ -61,7 +61,7 @@
 					<h:form id="form">
 						<!-- 					MAPA dos BOIS -->
 						<div align="center">
-							<p:gmap center="36.890257,30.707417" zoom="13" type="HYBRID"
+							<p:gmap center="-28.6749125,-49.3630053" zoom="16" type="HYBRID"
 								model="#{mapBean.advancedModel}"
 								style="width:1000px;height:350px">
 
@@ -99,27 +99,30 @@
 												oncomplete="carDialog.show()" />
 
 											<f:facet name="header">
-						            Lista de Bois
+						            		Lista de Bois
 						        </f:facet>
 											<p:column headerText="Bem" sortBy="ds_bem" filterBy="ds_bem"
 												id="ds_bem">
-						            #{bem.ds_bem}
+						            		#{bem.ds_bem}
 						        </p:column>
 
 											<p:column headerText="Dispositivo" sortBy="ds_dispositivo"
 												filterBy="ds_dispositivo" id="ds_dispositivo">
-						            #{bem.dispositivo.ds_dispositivo}
+											#{bem.dispositivo.ds_dispositivo}
 						        </p:column>
 
 											<p:column headerText="Coordenadas" sortBy="ds_coordenadas"
 												filterBy="ds_coordenadas" id="ds_coordenadas">
-						            #{bem.dispositivo.ds_coordenadas}
+											#{bem.dispositivo.ds_coordenadas}
 						        </p:column>
 
-											<p:column headerText="Data/Hora" sortBy="dt_ultima_consulta"
+											<p:column headerText="Data / Hora" sortBy="dt_ultima_consulta"
 												filterBy="dt_ultima_consulta" id="dt_ultima_consulta">
-						            #{bem.dispositivo.dt_ultima_consulta}
-						        </p:column>
+												<h:outputText value="#{bem.dispositivo.dt_ultima_consulta}">
+													<f:convertDateTime pattern="dd/MM/yyyy HH:mm" />
+												</h:outputText>
+
+											</p:column>
 
 										</p:dataTable>
 

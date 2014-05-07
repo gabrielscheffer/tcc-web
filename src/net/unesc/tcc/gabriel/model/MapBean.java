@@ -29,16 +29,16 @@ public class MapBean implements Serializable {
 		advancedModel = new DefaultMapModel();
 		
 		//Shared coordinates
-		LatLng coord1 = new LatLng(36.879466, 30.667648);
-		LatLng coord2 = new LatLng(36.883707, 30.689216);
-		LatLng coord3 = new LatLng(36.879703, 30.706707);
-		LatLng coord4 = new LatLng(36.885233, 30.702323);
+		LatLng coord1 = new LatLng(-28.6749125,-49.3630053);
+		LatLng coord2 = new LatLng(-28.6757785,-49.3650867);
+		LatLng coord3 = new LatLng(-28.677191,-49.367789);
+		LatLng coord4 = new LatLng(-28.6777746,-49.3684448);
 		
 		//Icons and Data
-		advancedModel.addOverlay(new Marker(coord1, "Konyaalti", "konyaalti.png", "http://maps.google.com/mapfiles/ms/micons/blue-dot.png"));
-		advancedModel.addOverlay(new Marker(coord2, "Ataturk Parki", "ataturkparki.png"));
-		advancedModel.addOverlay(new Marker(coord4, "Kaleici", "kaleici.png", "http://maps.google.com/mapfiles/ms/micons/pink-dot.png"));
-		advancedModel.addOverlay(new Marker(coord3, "Karaalioglu Parki", "karaalioglu.png", "http://maps.google.com/mapfiles/ms/micons/yellow-dot.png"));
+		advancedModel.addOverlay(new Marker(coord1, "BOI01", "konyaalti.png", "http://maps.google.com/mapfiles/ms/micons/blue-dot.png"));
+		advancedModel.addOverlay(new Marker(coord2, "BOI02", "ataturkparki.png", "http://maps.google.com/mapfiles/ms/micons/red-dot.png"));
+		advancedModel.addOverlay(new Marker(coord4, "BOI03", "kaleici.png", "http://maps.google.com/mapfiles/ms/micons/pink-dot.png"));
+		advancedModel.addOverlay(new Marker(coord3, "BOI04", "karaalioglu.png", "http://maps.google.com/mapfiles/ms/micons/yellow-dot.png"));
 	}
 
 	public MapModel getAdvancedModel() {
