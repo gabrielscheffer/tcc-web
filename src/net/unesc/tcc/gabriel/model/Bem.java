@@ -1,19 +1,41 @@
 package net.unesc.tcc.gabriel.model;
 
 import java.io.Serializable;
-import java.util.Date;
 
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.OneToOne;
+
+/**
+ * @author Gabriel
+ * 
+ */
+@Entity
 public class Bem implements Serializable {
 
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 692266294937161334L;
-	Dispositivo dispositivo;
-	Integer		cd_bem;
-	String		ds_bem;
-
 	
+	@Id
+	@Column(name = "cd_bem_id", nullable = false)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+	private Integer cd_bem;
+	@Column(name = "descricao_bem", nullable = false)
+	private String ds_bem;
+	
+	@OneToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name="cd_dispositivo_id")
+	private Dispositivo dispositivo;
+	
+	public Bem() {
+	}
 
 	public Bem(Dispositivo dispositivo, Integer cd_bem, String ds_bem) {
 		super();

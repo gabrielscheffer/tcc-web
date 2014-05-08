@@ -1,4 +1,4 @@
-package net.unesc.tcc.gabriel.model;
+package net.unesc.tcc.gabriel.control;
 
 import java.io.Serializable;
 

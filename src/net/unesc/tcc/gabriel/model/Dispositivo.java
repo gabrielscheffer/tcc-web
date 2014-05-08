@@ -9,21 +9,33 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.Table;
+import javax.persistence.Temporal;
+
 /**
  * @author Gabriel
  * 
  */
+@Entity
 public class Dispositivo implements Serializable {
 
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 4351275053454850562L;
-
-	Integer cd_dispositivo;
-	String ds_dispositivo, marca = "DIGI", firmware = "ROUTER", ds_coordenadas;
-	Date dt_ultima_consulta, dt_ultima_online;
-	boolean online;
+	@Id
+	@Column(name = "cd_dispositivo_id", nullable = false)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+	private Integer cd_dispositivo;
+	private String ds_dispositivo, marca = "DIGI", firmware = "ROUTER", ds_coordenadas;
+	@Temporal(javax.persistence.TemporalType.TIMESTAMP)
+	private Date dt_ultima_consulta, dt_ultima_online;
+	private boolean online;
 
 	public Dispositivo(Integer cd_dispositivo, String ds_coordenadas,
 			Date dt_ultima_consulta, boolean online) {
