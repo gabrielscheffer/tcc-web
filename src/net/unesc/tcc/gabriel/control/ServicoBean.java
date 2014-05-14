@@ -3,8 +3,17 @@
  */
 package net.unesc.tcc.gabriel.control;
 
+import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Date;
+
+import javax.annotation.PostConstruct;
+import javax.annotation.PreDestroy;
+import javax.ejb.PostActivate;
+import javax.ejb.PrePassivate;
+import javax.ejb.Singleton;
+import javax.ejb.Startup;
+import javax.persistence.PersistenceContext;
 
 import net.unesc.tcc.gabriel.model.Bem;
 import net.unesc.tcc.gabriel.model.Dispositivo;
@@ -17,12 +26,32 @@ import com.rapplogic.xbee.api.zigbee.ZBNodeDiscover;
  * @author Gabriel
  * 
  */
+@Singleton
+@Startup
 public class ServicoBean {
 
 	private ArrayList<Dispositivo> listadispositivos = null;
 	private ArrayList<Bem> listabens = null;
-
+	private Banco banco = new Banco();
+	@PersistenceContext(unitName = "primary")
 	
+	@PostConstruct
+	public void populabanco() {
+		try {
+			banco.startbd();
+		} catch (ParseException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+	@PreDestroy
+	public void limpezabanco(){
+		
+		
+	}
+
+//	@PrePassivate
+//	@PostActivate
 	public void consultaDispositivos() {
 		XbeeControl xbee = new XbeeControl();
 		try {
@@ -33,7 +62,7 @@ public class ServicoBean {
 				}
 				for (ZBNodeDiscover no : noslist) {
 					Dispositivo disp = new Dispositivo();
-					disp.setCd_dispositivo(noslist.indexOf(no)+1000);
+					disp.setCd_dispositivo(noslist.indexOf(no) + 1000);
 					disp.setDs_dispositivo(no.getNodeIdentifier());
 					disp.setDt_ultima_consulta(new Date());
 					disp.setFirmware(no.getDeviceType().name());
@@ -41,7 +70,6 @@ public class ServicoBean {
 					disp.setDs_coordenadas("-28.6749125,-49.3630053");
 					listadispositivos.add(disp);
 				}
-				Banco.salvarD(listadispositivos);
 			}
 
 		} catch (XBeeException e) {
@@ -53,8 +81,6 @@ public class ServicoBean {
 		}
 	}
 
-	
-
 	public void consultaBens() {
 		consultaDispositivos();
 		if (listadispositivos == null || listadispositivos.size() < 1) {
@@ -63,14 +89,15 @@ public class ServicoBean {
 		if (listabens == null) {
 			listabens = new ArrayList<Bem>();
 		}
-		// CRUZA AS DUAS LISTAS E SALVA NA TABELA DE REGISTROS DE BENS DO BANCO MYSQL
+		// CRUZA AS DUAS LISTAS E SALVA NA TABELA DE REGISTROS DE BENS DO BANCO
+		// MYSQL
 		for (Dispositivo d : listadispositivos) {
 			Bem b = new Bem(d, 1, "BOI DO MEU VÔ");
 			listabens.add(b);
 		}
-		Banco.salvarB(listabens);
+		banco.salvar(listabens);
 	}
-	
+
 	public ArrayList<Bem> consultaTemporaria() {
 		consultaDispositivos();
 		if (listadispositivos == null || listadispositivos.size() < 1) {
@@ -79,7 +106,8 @@ public class ServicoBean {
 		if (listabens == null) {
 			listabens = new ArrayList<Bem>();
 		}
-		// CRUZA AS DUAS LISTAS E SALVA NA TABELA DE REGISTROS DE BENS DO BANCO MYSQL
+		// CRUZA AS DUAS LISTAS E SALVA NA TABELA DE REGISTROS DE BENS DO BANCO
+		// MYSQL
 		for (Dispositivo d : listadispositivos) {
 			Bem b = new Bem(d, 1, "BOI DO MEU VÔ");
 			listabens.add(b);

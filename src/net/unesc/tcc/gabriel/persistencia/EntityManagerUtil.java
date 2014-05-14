@@ -6,8 +6,8 @@ import javax.persistence.Persistence;
 
 public class EntityManagerUtil {
 
-    private static ThreadLocal threadLocal = new ThreadLocal();
-    private static EntityManagerFactory emf = null;
+    private static ThreadLocal<EntityManager> threadLocal = new ThreadLocal<>();
+    private static EntityManagerFactory emf;
 
     public static EntityManager openEM() {
         EntityManager em = getEMF().createEntityManager();
@@ -28,7 +28,7 @@ public class EntityManagerUtil {
 
     public static EntityManagerFactory getEMF() {
         if (emf == null) {
-            emf = Persistence.createEntityManagerFactory("WebTCC");
+            emf = Persistence.createEntityManagerFactory("WebTCCPU");
         }
         return emf;
     }
