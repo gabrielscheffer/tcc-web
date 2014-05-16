@@ -3,8 +3,8 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import org.apache.log4j.Logger;
-import org.apache.log4j.PropertyConfigurator;
+//import org.apache.log4j.Logger;
+//import org.apache.log4j.PropertyConfigurator;
 
 import com.rapplogic.xbee.api.ApiId;
 import com.rapplogic.xbee.api.AtCommand;
@@ -21,7 +21,7 @@ import com.rapplogic.xbee.api.zigbee.ZNetTxStatusResponse;
 import com.rapplogic.xbee.util.ByteUtils;
 
 public class XbeeControl {
-	private final static Logger log = Logger.getLogger(XbeeControl.class);
+	//private final static Logger log = Logger.getLogger(XbeeControl.class);
 
 	private int[] encrypt(String acomando) {
 		int[] icomando = new int[acomando.length()];
@@ -41,7 +41,7 @@ public class XbeeControl {
 	}
 	
 	protected ArrayList<ZBNodeDiscover> descobreNos() throws XBeeException, InterruptedException {
-		PropertyConfigurator.configure("log4j.properties");
+		//PropertyConfigurator.configure("log4j.properties");
 		XBee xbee = new XBee();
 		ArrayList<ZBNodeDiscover> retorno = null;
 
@@ -52,7 +52,7 @@ public class XbeeControl {
 
 			// default is 6 seconds
 			int nodeDiscoveryTimeout = ByteUtils.convertMultiByteToInt(nodeTimeout.getValue()) * 100;
-			log.info("Sending Node Discover command");
+			//log.info("Sending Node Discover command");
 			xbee.sendAsynchronous(new AtCommand("ND"));
 			List<? extends XBeeResponse> responses = xbee.collectResponses(nodeDiscoveryTimeout);
 
@@ -68,7 +68,7 @@ public class XbeeControl {
 							retorno = new ArrayList<ZBNodeDiscover>();
 						}
 						retorno.add(nd);
-						log.info("Node Discover is " + nd);
+						//log.info("Node Discover is " + nd);
 					}
 				}
 			}
@@ -83,7 +83,7 @@ public class XbeeControl {
 	}
 
 	protected void enviarComando(String acomando) throws XBeeException, InterruptedException {
-		PropertyConfigurator.configure("log4j.properties");
+		//PropertyConfigurator.configure("log4j.properties");
 		XBee xbee = new XBee();
 
 		try {
@@ -93,8 +93,8 @@ public class XbeeControl {
 			XBeeAddress64 addr64 = new XBeeAddress64(0x00, 0x13, 0xa2, 0x00, 0x40, 0xac, 0xb1, 0x4e);
 			ZNetTxRequest request = new ZNetTxRequest(1, addr64, addr16, 0x00, ZNetTxRequest.Option.UNICAST, payload);
 			//log.info("Pacote bytes >> " + Arrays.toString(request.getPayload()));
-			log.info("Pacote String >> " + decrypt(request.getPayload()));
-			log.debug("Pacote xbee >> " + request);
+			//log.info("Pacote String >> " + decrypt(request.getPayload()));
+			//log.debug("Pacote xbee >> " + request);
 			
 			
 			xbee.sendSynchronous(request);
@@ -105,20 +105,20 @@ public class XbeeControl {
 				switch(lapiId){
 				case ZNET_RX_RESPONSE:{
 					ZNetRxResponse rxresponse = (ZNetRxResponse) response;
-					log.debug(lapiId+" >> " + rxresponse);
+					//log.debug(lapiId+" >> " + rxresponse);
 					//log.info("Resposta rx bytes >> " + Arrays.toString(rxresponse.getData()));
-					log.info("Resposta rx String >> " + decrypt(rxresponse.getData()));
+					//log.info("Resposta rx String >> " + decrypt(rxresponse.getData()));
 				}
 					break;
 				case ZNET_TX_REQUEST:
 					break;
 				case ZNET_TX_STATUS_RESPONSE:{
 					ZNetTxStatusResponse statusresponse = (ZNetTxStatusResponse) response;
-					log.debug(lapiId+" >> " + statusresponse);
-					log.info("Resposta status >> " + statusresponse.getDeliveryStatus());
+					//log.debug(lapiId+" >> " + statusresponse);
+					//log.info("Resposta status >> " + statusresponse.getDeliveryStatus());
 				}
 					break;
-				default: log.error("Não tratado: " + lapiId);
+				default: //log.error("Não tratado: " + lapiId);
 					break;
 				}
 			}

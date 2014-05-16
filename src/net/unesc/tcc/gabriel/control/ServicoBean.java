@@ -9,11 +9,13 @@ import java.util.Date;
 
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
+import javax.ejb.AfterBegin;
+import javax.ejb.AfterCompletion;
 import javax.ejb.PostActivate;
 import javax.ejb.PrePassivate;
 import javax.ejb.Singleton;
 import javax.ejb.Startup;
-import javax.persistence.PersistenceContext;
+import javax.enterprise.context.Initialized;
 
 import net.unesc.tcc.gabriel.model.Bem;
 import net.unesc.tcc.gabriel.model.Dispositivo;
@@ -26,17 +28,18 @@ import com.rapplogic.xbee.api.zigbee.ZBNodeDiscover;
  * @author Gabriel
  * 
  */
-@Singleton
 @Startup
+@Singleton
 public class ServicoBean {
 
 	private ArrayList<Dispositivo> listadispositivos = null;
 	private ArrayList<Bem> listabens = null;
-	private Banco banco = new Banco();
-	@PersistenceContext(unitName = "primary")
+	private Banco banco;
 	
 	@PostConstruct
-	public void populabanco() {
+	public void inicializar() {
+		banco = new Banco();
+		System.out.println("Glassfish diz: 'Estou iniciando!'");
 		try {
 			banco.startbd();
 		} catch (ParseException e) {
@@ -45,13 +48,13 @@ public class ServicoBean {
 		}
 	}
 	@PreDestroy
-	public void limpezabanco(){
-		
+	public void finalizar(){
+		System.out.println("Glassfish diz: 'Estou desligando!'");
+		banco.closebd();
 		
 	}
+	
 
-//	@PrePassivate
-//	@PostActivate
 	public void consultaDispositivos() {
 		XbeeControl xbee = new XbeeControl();
 		try {
@@ -62,7 +65,7 @@ public class ServicoBean {
 				}
 				for (ZBNodeDiscover no : noslist) {
 					Dispositivo disp = new Dispositivo();
-					disp.setCd_dispositivo(noslist.indexOf(no) + 1000);
+					disp.setCd_dispositivo((long) (noslist.indexOf(no) + 1000));
 					disp.setDs_dispositivo(no.getNodeIdentifier());
 					disp.setDt_ultima_consulta(new Date());
 					disp.setFirmware(no.getDeviceType().name());
@@ -91,8 +94,10 @@ public class ServicoBean {
 		}
 		// CRUZA AS DUAS LISTAS E SALVA NA TABELA DE REGISTROS DE BENS DO BANCO
 		// MYSQL
+		int i = 1;
 		for (Dispositivo d : listadispositivos) {
-			Bem b = new Bem(d, 1, "BOI DO MEU VÔ");
+			Bem b = new Bem(d, (long) i, "BOI DO MEU VÔ");
+			i++;
 			listabens.add(b);
 		}
 		banco.salvar(listabens);
@@ -108,10 +113,16 @@ public class ServicoBean {
 		}
 		// CRUZA AS DUAS LISTAS E SALVA NA TABELA DE REGISTROS DE BENS DO BANCO
 		// MYSQL
+		int i = 1;
 		for (Dispositivo d : listadispositivos) {
-			Bem b = new Bem(d, 1, "BOI DO MEU VÔ");
+			Bem b = new Bem(d, (long) i, "BOI DO MEU VÔ");
+			i++;
 			listabens.add(b);
 		}
 		return listabens;
 	}
+	public Banco getBanco() {
+		return banco;
+	}
+	
 }

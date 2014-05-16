@@ -89,17 +89,17 @@
 									title="Bens Online" titleStyle="text-align:center"
 									style="padding-top: 5px;">
 									<div>
-										<p:dataTable var="bem" value="#{tabelaBensBean.benslist}"
+										<p:dataTable var="bem" value="#{tabelaBensBean.benslistOn}"
 											rowKey="#{bem.cd_bem}" paginator="true" rows="10"
-											selection="#{tabelaBensBean.selectedBem}"
+											selection="#{tabelaBensBean.selectedBemOn}"
 											selectionMode="single"
-											filteredValue="#{tabelaBensBean.filteredBens}" id="bensTable">
+											filteredValue="#{tabelaBensBean.filteredBensOn}" id="bensTableOn">
 
 											<p:ajax event="rowSelect" update=""
-												oncomplete="carDialog.show()" />
+												oncomplete="bemDialogOn.show()" />
 
 											<f:facet name="header">
-						            		Lista de Bois
+						            		Lista de Bois Online
 						        </f:facet>
 											<p:column headerText="Bem" sortBy="ds_bem" filterBy="ds_bem"
 												id="ds_bem">
@@ -126,11 +126,11 @@
 
 										</p:dataTable>
 
-										<p:dialog header="Car Detail" widgetVar="carDialog"
-											resizable="false" width="200" showEffect="explode"
-											hideEffect="explode">
+										<p:dialog id="online" header="Detalhes Bem" widgetVar="bemDialogOn"
+											resizable="false" width="200" showEffect="fade"
+											hideEffect="fade">
 
-											<h:panelGrid id="display" columns="2" cellpadding="4">
+											<h:panelGrid id="displayOn" columns="2" cellpadding="4">
 
 												<f:facet name="header">
 													<p:graphicImage
@@ -139,20 +139,20 @@
 
 												<h:outputText value="Model:" />
 												<h:outputText value="#{tabelabensbean.selectedCar.model}"
-													id="model" />
+													id="modelOn" />
 
 												<h:outputText value="Year:" />
 												<h:outputText value="#{tabelabensbean.selectedCar.year}"
-													id="year" />
+													id="yearOn" />
 
 												<h:outputText value="Manufacturer:" />
 												<h:outputText
 													value="#{tabelabensbean.selectedCar.manufacturer}"
-													id="manufacturer" />
+													id="manufacturerOn" />
 
 												<h:outputText value="Color:" />
 												<h:outputText value="#{tabelabensbean.selectedCar.color}"
-													id="color" />
+													id="colorOn" />
 											</h:panelGrid>
 										</p:dialog>
 									</div>
@@ -160,13 +160,74 @@
 								<p:tab titleStyleClass="image-accordion-tab-off"
 									title="Bens Offline" titleStyle="text-align:center"
 									style="padding-top: 5px;">
-									<h:panelGrid columns="2" cellpadding="10">
-										<p:graphicImage value="/images/godfather/godfather2.jpg" />
-										<h:outputText
-											value="Francis Ford Coppola's legendary continuation and sequel to his landmark 1972 film, The_Godfather, parallels the young Vito Corleone's rise with his son Michael's spiritual fall, deepening The_Godfather's depiction of the dark side of the American dream. 
-								In the early 1900s, the child Vito flees his Sicilian village for America after the local Mafia kills his family. Vito struggles to make a living, legally or illegally, for his wife and growing brood in Little Italy, 
-								killing the local Black Hand Fanucci after he demands his customary cut of the tyro's business. With Fanucci gone, Vito's communal stature grows." />
-									</h:panelGrid>
+									<div>
+										<p:dataTable var="bem" value="#{tabelaBensBean.benslistOff}"
+											rowKey="#{bem.cd_bem}" paginator="true" rows="10"
+											selection="#{tabelaBensBean.selectedBemOff}"
+											selectionMode="single"
+											filteredValue="#{tabelaBensBean.filteredBensOff}" id="bensTableOff">
+
+											<p:ajax event="rowSelect" update=""
+												oncomplete="bemDialogOff.show()" />
+
+											<f:facet name="header">
+						            		Lista de Bois Offline
+						        </f:facet>
+											<p:column headerText="Bem" sortBy="ds_bem" filterBy="ds_bem"
+												id="ds_bem">
+						            		#{bem.ds_bem}
+						        </p:column>
+
+											<p:column headerText="Dispositivo" sortBy="ds_dispositivo"
+												filterBy="ds_dispositivo" id="ds_dispositivo">
+											#{bem.dispositivo.ds_dispositivo}
+						        </p:column>
+
+											<p:column headerText="Coordenadas" sortBy="ds_coordenadas"
+												filterBy="ds_coordenadas" id="ds_coordenadas">
+											#{bem.dispositivo.ds_coordenadas}
+						        </p:column>
+
+											<p:column headerText="Data / Hora" sortBy="dt_ultima_consulta"
+												filterBy="dt_ultima_consulta" id="dt_ultima_consulta">
+												<h:outputText value="#{bem.dispositivo.dt_ultima_consulta}">
+													<f:convertDateTime pattern="dd/MM/yyyy HH:mm" />
+												</h:outputText>
+
+											</p:column>
+
+										</p:dataTable>
+
+										<p:dialog id="offline" header="Detalhes Bem" widgetVar="bemDialogOff"
+											resizable="false" width="200" showEffect="fade"
+											hideEffect="fade">
+
+											<h:panelGrid id="displayOff" columns="2" cellpadding="4">
+
+												<f:facet name="header">
+													<p:graphicImage
+														value="/images/cars/#{tabelabensbean.selectedCar.manufacturer}.jpg" />
+												</f:facet>
+
+												<h:outputText value="Model:" />
+												<h:outputText value="#{tabelabensbean.selectedCar.model}"
+													id="modelOff" />
+
+												<h:outputText value="Year:" />
+												<h:outputText value="#{tabelabensbean.selectedCar.year}"
+													id="yearOff" />
+
+												<h:outputText value="Manufacturer:" />
+												<h:outputText
+													value="#{tabelabensbean.selectedCar.manufacturer}"
+													id="manufacturerOff" />
+
+												<h:outputText value="Color:" />
+												<h:outputText value="#{tabelabensbean.selectedCar.color}"
+													id="colorOff" />
+											</h:panelGrid>
+										</p:dialog>
+									</div>
 								</p:tab>
 							</p:accordionPanel>
 						</div>

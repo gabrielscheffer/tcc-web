@@ -11,10 +11,12 @@ import java.util.Date;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.JoinColumn;
+import javax.persistence.OneToOne;
 import javax.persistence.Temporal;
 
 /**
@@ -30,14 +32,18 @@ public class Dispositivo implements Serializable {
 	private static final long serialVersionUID = 4351275053454850562L;
 	@Id
 	@Column(name = "cd_dispositivo_id", nullable = false)
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Integer cd_dispositivo;
+//    @GeneratedValue(strategy = GenerationType.IDENTITY)
+	private Long cd_dispositivo;
 	private String ds_dispositivo, marca = "DIGI", firmware = "ROUTER", ds_coordenadas;
 	@Temporal(javax.persistence.TemporalType.TIMESTAMP)
 	private Date dt_ultima_consulta, dt_ultima_online;
 	private boolean online;
+	
+	@OneToOne(mappedBy="dispositivo")
+	@JoinColumn(name="cd_dispositivo_id")
+	private Bem bem;
 
-	public Dispositivo(Integer cd_dispositivo, String ds_coordenadas,
+	public Dispositivo(Long cd_dispositivo, String ds_coordenadas,
 			Date dt_ultima_consulta, boolean online) {
 		super();
 		this.cd_dispositivo = cd_dispositivo;
@@ -46,7 +52,7 @@ public class Dispositivo implements Serializable {
 		this.dt_ultima_consulta = dt_ultima_consulta;
 		this.online = online;
 	}
-	public Dispositivo(Integer cd_dispositivo, String ds_coordenadas,
+	public Dispositivo(Long cd_dispositivo, String ds_coordenadas,
 			String dt_ultima_consulta, boolean online) throws ParseException {
 		super();
 		this.cd_dispositivo = cd_dispositivo;
@@ -68,11 +74,11 @@ public class Dispositivo implements Serializable {
 		this.online = online;
 	}
 
-	public Integer getCd_dispositivo() {
+	public Long getCd_dispositivo() {
 		return cd_dispositivo;
 	}
 
-	public void setCd_dispositivo(Integer cd_dispositivo) {
+	public void setCd_dispositivo(Long cd_dispositivo) {
 		this.cd_dispositivo = cd_dispositivo;
 	}
 

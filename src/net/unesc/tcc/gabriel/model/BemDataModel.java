@@ -30,71 +30,65 @@ public class BemDataModel extends ListDataModel<Bem> implements SelectableDataMo
         super(data);
     }
     
-    @Override
-	public int getRowCount() {
-		// TODO Auto-generated method stub
-		return super.getRowCount();
-	}
-
-	@Override
-	public Bem getRowData() {
-		// TODO Auto-generated method stub
-		return super.getRowData();
-	}
-
-	@Override
-	public int getRowIndex() {
-		// TODO Auto-generated method stub
-		return super.getRowIndex();
-	}
-
-	@Override
-	public Object getWrappedData() {
-		// TODO Auto-generated method stub
-		return super.getWrappedData();
-	}
-
-	@Override
-	public boolean isRowAvailable() {
-		// TODO Auto-generated method stub
-		return super.isRowAvailable();
-	}
-
-	@Override
-	public void setRowIndex(int arg0) {
-		// TODO Auto-generated method stub
-		super.setRowIndex(arg0);
-	}
-
-	@Override
-	public void setWrappedData(Object data) {
-		// TODO Auto-generated method stub
-		super.setWrappedData(data);
-	}
-
-	@Override
-	public void addDataModelListener(DataModelListener listener) {
-		// TODO Auto-generated method stub
-		super.addDataModelListener(listener);
-	}
-
-	@Override
-	public DataModelListener[] getDataModelListeners() {
-		// TODO Auto-generated method stub
-		return super.getDataModelListeners();
-	}
-
-	@Override
-	public Iterator<Bem> iterator() {
-		// TODO Auto-generated method stub
-		return super.iterator();
-	}
-
-	@Override
-	public void removeDataModelListener(DataModelListener listener) {
-		// TODO Auto-generated method stub
-		super.removeDataModelListener(listener);
-	}
+//    @Override
+//	public int getRowCount() {
+//		// TODO Auto-generated method stub
+//		return super.getRowCount();
+//	}
+//
+//	@Override
+//	public int getRowIndex() {
+//		// TODO Auto-generated method stub
+//		return super.getRowIndex();
+//	}
+//
+//	@Override
+//	public Object getWrappedData() {
+//		// TODO Auto-generated method stub
+//		return super.getWrappedData();
+//	}
+//
+//	@Override
+//	public boolean isRowAvailable() {
+//		// TODO Auto-generated method stub
+//		return super.isRowAvailable();
+//	}
+//
+//	@Override
+//	public void setRowIndex(int arg0) {
+//		// TODO Auto-generated method stub
+//		super.setRowIndex(arg0);
+//	}
+//
+//	@Override
+//	public void setWrappedData(Object data) {
+//		// TODO Auto-generated method stub
+//		super.setWrappedData(data);
+//	}
+//
+//	@Override
+//	public void addDataModelListener(DataModelListener listener) {
+//		// TODO Auto-generated method stub
+//		super.addDataModelListener(listener);
+//	}
+//
+//	@Override
+//	public DataModelListener[] getDataModelListeners() {
+//		// TODO Auto-generated method stub
+//		return super.getDataModelListeners();
+//	}
+//
+//	@Override
+//	public Iterator<Bem> iterator() {
+//		// TODO Auto-generated method stub
+//		return super.iterator();
+//	}
+//
+//	@Override
+//	public void removeDataModelListener(DataModelListener listener) {
+//		// TODO Auto-generated method stub
+//		super.removeDataModelListener(listener);
+//	}
 
 	@Override
     public Bem getRowData(String rowKey) {

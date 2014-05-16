@@ -8,16 +8,13 @@ package net.unesc.tcc.gabriel.control;
  *
  */
 import java.io.Serializable;
-import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.UUID;
 
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
 
 import net.unesc.tcc.gabriel.model.Bem;
-import net.unesc.tcc.gabriel.model.Dispositivo;
 import net.unesc.tcc.gabriel.persistencia.Banco;
 
 @ManagedBean
@@ -29,62 +26,91 @@ public class TabelaBensBean implements Serializable {
 	 */
 	private static final long serialVersionUID = 2521222924861033L;
 
-	private List<Bem> filteredBens;
-
-	private List<Bem> benslist;
-
-	private Bem selectedBem;
+	// Objetos da lista online
+	private List<Bem> filteredBensOn;
+	private List<Bem> benslistOn;
+	private Bem selectedBemOn;
+	// Objetos da lista offline
+	private List<Bem> filteredBensOff;
+	private List<Bem> benslistOff;
+	private Bem selectedBemOff;
 
 	public TabelaBensBean() {
-		benslist = null;
-		benslist = new ArrayList<Bem>();
+		benslistOn = null;
+		benslistOn = new ArrayList<Bem>();
 		popularBens();
 	}
 
-	public Bem getSelectedBem() {
-		return selectedBem;
+	public Bem getSelectedBemOn() {
+		return selectedBemOn;
 	}
 
-	public void setSelectedBem(Bem selectedBem) {
-		this.selectedBem = selectedBem;
-	}
-	
-	public List<Bem> getFilteredBens() {
-		return filteredBens;
+	public void setSelectedBemOn(Bem selectedBem) {
+		this.selectedBemOn = selectedBem;
 	}
 
-	public void setFilteredBens(List<Bem> filteredBens) {
-		this.filteredBens = filteredBens;
+	public List<Bem> getFilteredBensOn() {
+		return filteredBensOn;
 	}
 
-	public List<Bem> getBenslist() {
-		return benslist;
+	public void setFilteredBensOn(List<Bem> filteredBens) {
+		this.filteredBensOn = filteredBens;
+	}
+
+	public List<Bem> getBenslistOn() {
+		return benslistOn;
+	}
+
+	public List<Bem> getFilteredBensOff() {
+		return filteredBensOff;
+	}
+
+	public void setFilteredBensOff(List<Bem> filteredBensOff) {
+		this.filteredBensOff = filteredBensOff;
+	}
+
+	public Bem getSelectedBemOff() {
+		return selectedBemOff;
+	}
+
+	public void setSelectedBemOff(Bem selectedBemOff) {
+		this.selectedBemOff = selectedBemOff;
+	}
+
+	public List<Bem> getBenslistOff() {
+		return benslistOff;
+	}
+
+	public void forcardescnos() {
+
+	}
+
+	public void bdrefresh() {
+		Banco banco = new Banco();
+		List<Bem> novalista = banco.recuperartodos();
+		if (novalista == null) {
+			System.out.println("Lista nula!");
+			return;
+		}
+		System.out.println("Retornado: " + novalista.size());
+		List<Bem> online = new ArrayList<Bem>(), offline = new ArrayList<Bem>();
+		for (Bem b : novalista) {
+			if (b.getDispositivo().isOnline()) {
+				online.add(b);
+			} else {
+				offline.add(b);
+			}
+		}
+		System.out.println("Online: " + online.size());
+		System.out.println("Offline: " + offline.size());
+		this.benslistOn = online;
+		this.benslistOff = offline;
 	}
 
 	private void popularBens() {
-//		ServicoBean servico = new ServicoBean();
-//		try {
-//			benslist.addAll(servico.consultaTemporaria());
-			
-//			benslist.add(new Bem(new Dispositivo(2, "-28.6749125,-49.3630053,16z", "24/04/2014 20:54", true), 1,"BOI01"));
-//			benslist.add(new Bem(new Dispositivo(3, "-28.6757785,-49.3650867", "24/04/2014 20:54", true), 2,"BOI02"));
-//			benslist.add(new Bem(new Dispositivo(1, "-28.677191,-49.367789", "24/04/2014 20:54", false), 3,"BOI03"));
-//			benslist.add(new Bem(new Dispositivo(4, "-28.6777746,-49.3684448", "24/04/2014 20:54", true), 4,"BOI04"));
-//			benslist.add(new Bem(new Dispositivo(5, "-28.6778136,-49.367487", "24/04/2014 20:54", false), 5,"BOI05"));
-//			benslist.add(new Bem(new Dispositivo(6, "-28.6774144,-49.3663017", "24/04/2014 20:54", true), 6,"BOI06"));
-//			benslist.add(new Bem(new Dispositivo(7, "-28.6768261,-49.3657773", "24/04/2014 20:54", false), 7,"BOI07"));
-//			benslist.add(new Bem(new Dispositivo(8, "-28.6762637,-49.3656794", "24/04/2014 20:54", false), 8,"BOI08"));
-//			benslist.add(new Bem(new Dispositivo(9, "-28.675846,-49.3655587", "24/04/2014 20:54", false), 9,"BOI09"));
-//			benslist.add(new Bem(new Dispositivo(10, "-28.6760519,-49.3650089", "24/04/2014 20:54", true), 10,"BOI10"));
-//		} catch (ParseException e) {
-//			// TODO Auto-generated catch block
-//			e.printStackTrace();
-//		}
-		
+		ServicoBean servico = new ServicoBean();
+		// benslist.addAll(servico.consultaTemporaria());
+		bdrefresh();
 	}
-	
-	
-
-
 
 }

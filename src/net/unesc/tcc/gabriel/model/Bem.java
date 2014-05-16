@@ -4,7 +4,6 @@ import java.io.Serializable;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -25,19 +24,19 @@ public class Bem implements Serializable {
 	
 	@Id
 	@Column(name = "cd_bem_id", nullable = false)
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Integer cd_bem;
+//    @GeneratedValue(strategy = GenerationType.IDENTITY)
+	private Long cd_bem;
 	@Column(name = "descricao_bem", nullable = false)
 	private String ds_bem;
 	
-	@OneToOne(fetch = FetchType.LAZY)
+	@OneToOne
 	@JoinColumn(name="cd_dispositivo_id")
 	private Dispositivo dispositivo;
 	
 	public Bem() {
 	}
 
-	public Bem(Dispositivo dispositivo, Integer cd_bem, String ds_bem) {
+	public Bem(Dispositivo dispositivo, Long cd_bem, String ds_bem) {
 		super();
 		this.dispositivo = dispositivo;
 		this.cd_bem = cd_bem;
@@ -52,11 +51,11 @@ public class Bem implements Serializable {
 		this.dispositivo = dispositivo;
 	}
 
-	public Integer getCd_bem() {
+	public Long getCd_bem() {
 		return cd_bem;
 	}
 
-	public void setCd_bem(Integer cd_bem) {
+	public void setCd_bem(Long cd_bem) {
 		this.cd_bem = cd_bem;
 	}
 
