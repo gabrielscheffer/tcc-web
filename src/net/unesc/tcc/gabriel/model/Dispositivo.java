@@ -1,71 +1,112 @@
-/**
- * 
- */
 package net.unesc.tcc.gabriel.model;
 
 import java.io.Serializable;
+import javax.persistence.*;
+
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.OneToOne;
-import javax.persistence.Temporal;
+import java.util.List;
 
 /**
- * @author Gabriel
+ * The persistent class for the dispositivo database table.
  * 
  */
 @Entity
+@Table(name = "dispositivo")
 public class Dispositivo implements Serializable {
+	private static final long serialVersionUID = 1L;
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 4351275053454850562L;
 	@Id
-	@Column(name = "cd_dispositivo_id", nullable = false)
-//    @GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Long cd_dispositivo;
-	private String ds_dispositivo, marca = "DIGI", firmware = "ROUTER", ds_coordenadas;
-	@Temporal(javax.persistence.TemporalType.TIMESTAMP)
-	private Date dt_ultima_consulta, dt_ultima_online;
+	@Column(name = "cd_dispositivo_id", unique = true, nullable = false)
+	private Long cdDispositivoId;
+
+	@Column(name = "ds_coordenadas")
+	private String dsCoordenadas;
+
+	@Column(name = "ds_dispositivo")
+	private String dsDispositivo;
+
+	@Temporal(TemporalType.TIMESTAMP)
+	@Column(name = "dt_ultima_online")
+	private Date dtUltimaOnline;
+
+	private String firmware = "ROUTER";
+
+	private String marca = "DIGI";
+
 	private boolean online;
-	
-	@OneToOne(mappedBy="dispositivo")
-	@JoinColumn(name="cd_dispositivo_id")
+
+	// bi-directional one-to-one association to Bem
+	@OneToOne(mappedBy = "dispositivo")
 	private Bem bem;
 
-	public Dispositivo(Long cd_dispositivo, String ds_coordenadas,
-			Date dt_ultima_consulta, boolean online) {
-		super();
-		this.cd_dispositivo = cd_dispositivo;
-		this.ds_dispositivo = "BEE" + String.format("%02d", cd_dispositivo);
-		this.ds_coordenadas = ds_coordenadas;
-		this.dt_ultima_consulta = dt_ultima_consulta;
-		this.online = online;
-	}
-	public Dispositivo(Long cd_dispositivo, String ds_coordenadas,
-			String dt_ultima_consulta, boolean online) throws ParseException {
-		super();
-		this.cd_dispositivo = cd_dispositivo;
-		this.ds_dispositivo = "BEE" + String.format("%02d", cd_dispositivo);
-		this.ds_coordenadas = ds_coordenadas;
-		DateFormat df = new SimpleDateFormat("dd/MM/yyyy hh:mm");
-		this.dt_ultima_consulta = df.parse(dt_ultima_consulta);
-		this.online = online;
-	}
-	
+	// bi-directional many-to-one association to DispositivoLog
+	@OneToMany(mappedBy = "dispositivo")
+	private List<DispositivoLog> dispositivoLogs;
 
 	public Dispositivo() {
 	}
+
+	public Dispositivo(Long cdDispositivoId, String dsCoordenadas, boolean online) {
+		this.cdDispositivoId = cdDispositivoId;
+		this.dsDispositivo = "BEE" + String.format("%02d", cdDispositivoId);
+		this.dsCoordenadas = dsCoordenadas;
+		if (online){
+			this.dtUltimaOnline = new Date(0);
+		}
+		this.online = online;
+	}
+
+	public Long getCdDispositivoId() {
+		return this.cdDispositivoId;
+	}
+
+	public void setCdDispositivoId(Long cdDispositivoId) {
+		this.cdDispositivoId = cdDispositivoId;
+	}
+
+	public String getDsCoordenadas() {
+		return this.dsCoordenadas;
+	}
+
+	public void setDsCoordenadas(String dsCoordenadas) {
+		this.dsCoordenadas = dsCoordenadas;
+	}
+
+	public String getDsDispositivo() {
+		return this.dsDispositivo;
+	}
+
+	public void setDsDispositivo(String dsDispositivo) {
+		this.dsDispositivo = dsDispositivo;
+	}
+
+	public Date getDtUltimaOnline() {
+		return this.dtUltimaOnline;
+	}
+
+	public void setDtUltimaOnline(Date dtUltimaOnline) {
+		this.dtUltimaOnline = dtUltimaOnline;
+	}
+
+	public String getFirmware() {
+		return this.firmware;
+	}
+
+	public void setFirmware(String firmware) {
+		this.firmware = firmware;
+	}
+
+	public String getMarca() {
+		return this.marca;
+	}
+
+	public void setMarca(String marca) {
+		this.marca = marca;
+	}
+
 	public boolean isOnline() {
 		return online;
 	}
@@ -74,52 +115,34 @@ public class Dispositivo implements Serializable {
 		this.online = online;
 	}
 
-	public Long getCd_dispositivo() {
-		return cd_dispositivo;
+	public Bem getBem() {
+		return this.bem;
 	}
 
-	public void setCd_dispositivo(Long cd_dispositivo) {
-		this.cd_dispositivo = cd_dispositivo;
+	public void setBem(Bem bem) {
+		this.bem = bem;
 	}
 
-	public String getDs_dispositivo() {
-		return ds_dispositivo;
+	public List<DispositivoLog> getDispositivoLogs() {
+		return this.dispositivoLogs;
 	}
 
-	public void setDs_dispositivo(String ds_dispositivo) {
-		this.ds_dispositivo = ds_dispositivo;
+	public void setDispositivoLogs(List<DispositivoLog> dispositivoLogs) {
+		this.dispositivoLogs = dispositivoLogs;
 	}
 
-	public String getMarca() {
-		return marca;
+	public DispositivoLog addDispositivoLog(DispositivoLog dispositivoLog) {
+		getDispositivoLogs().add(dispositivoLog);
+		dispositivoLog.setDispositivo(this);
+
+		return dispositivoLog;
 	}
 
-	public void setMarca(String marca) {
-		this.marca = marca;
-	}
+	public DispositivoLog removeDispositivoLog(DispositivoLog dispositivoLog) {
+		getDispositivoLogs().remove(dispositivoLog);
+		dispositivoLog.setDispositivo(null);
 
-	public String getFirmware() {
-		return firmware;
-	}
-
-	public void setFirmware(String firmware) {
-		this.firmware = firmware;
-	}
-
-	public String getDs_coordenadas() {
-		return ds_coordenadas;
-	}
-
-	public void setDs_coordenadas(String ds_coordenadas) {
-		this.ds_coordenadas = ds_coordenadas;
-	}
-
-	public Date getDt_ultima_consulta() {
-		return dt_ultima_consulta;
-	}
-
-	public void setDt_ultima_consulta(Date dt_ultima_consulta) {
-		this.dt_ultima_consulta = dt_ultima_consulta;
+		return dispositivoLog;
 	}
 
 }

@@ -9,8 +9,11 @@ package net.unesc.tcc.gabriel.control;
  */
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
+import javax.annotation.PostConstruct;
+import javax.ejb.EJB;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
 
@@ -24,6 +27,14 @@ public class TabelaBensBean implements Serializable {
 	/**
 	 * 
 	 */
+	@EJB
+	private ServicoBean servico;
+	
+	@PostConstruct
+	public void init(){
+		servico.getUltima_consulta();
+	}
+	
 	private static final long serialVersionUID = 2521222924861033L;
 
 	// Objetos da lista online
@@ -34,11 +45,11 @@ public class TabelaBensBean implements Serializable {
 	private List<Bem> filteredBensOff;
 	private List<Bem> benslistOff;
 	private Bem selectedBemOff;
+	
 
 	public TabelaBensBean() {
 		benslistOn = null;
 		benslistOn = new ArrayList<Bem>();
-		popularBens();
 	}
 
 	public Bem getSelectedBemOn() {
@@ -80,14 +91,19 @@ public class TabelaBensBean implements Serializable {
 	public List<Bem> getBenslistOff() {
 		return benslistOff;
 	}
+	
+	public Date getDtUltimaConsulta(){
+		return servico.getUltima_consulta();
+	}
 
 	public void forcardescnos() {
 
 	}
 
+	@PostConstruct
 	public void bdrefresh() {
 		Banco banco = new Banco();
-		List<Bem> novalista = banco.recuperartodos();
+		List<Bem> novalista = banco.recuperartodosBens();
 		if (novalista == null) {
 			System.out.println("Lista nula!");
 			return;
@@ -105,12 +121,6 @@ public class TabelaBensBean implements Serializable {
 		System.out.println("Offline: " + offline.size());
 		this.benslistOn = online;
 		this.benslistOff = offline;
-	}
-
-	private void popularBens() {
-		ServicoBean servico = new ServicoBean();
-		// benslist.addAll(servico.consultaTemporaria());
-		bdrefresh();
 	}
 
 }

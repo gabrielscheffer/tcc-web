@@ -1,70 +1,88 @@
 package net.unesc.tcc.gabriel.model;
 
 import java.io.Serializable;
+import javax.persistence.*;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.OneToOne;
+import java.util.List;
 
 /**
- * @author Gabriel
+ * The persistent class for the bem database table.
  * 
  */
 @Entity
+@Table(name = "bem")
 public class Bem implements Serializable {
+	private static final long serialVersionUID = 1L;
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 692266294937161334L;
-	
 	@Id
-	@Column(name = "cd_bem_id", nullable = false)
-//    @GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Long cd_bem;
+	@Column(name = "cd_bem_id", updatable = false, unique = true, nullable = false)
+	private Long cdBemId;
+
 	@Column(name = "descricao_bem", nullable = false)
-	private String ds_bem;
-	
+	private String descricaoBem;
+
+	// bi-directional one-to-one association to Dispositivo
 	@OneToOne
-	@JoinColumn(name="cd_dispositivo_id")
+	@JoinColumn(name = "cd_dispositivo_id", nullable = false)
 	private Dispositivo dispositivo;
-	
+
+	// bi-directional many-to-one association to BemLog
+	@OneToMany(mappedBy = "bem")
+	private List<BemLog> bemLogs;
+
 	public Bem() {
 	}
 
-	public Bem(Dispositivo dispositivo, Long cd_bem, String ds_bem) {
-		super();
+	public Bem(Dispositivo dispositivo, Long cdBemId, String descricaoBem) {
 		this.dispositivo = dispositivo;
-		this.cd_bem = cd_bem;
-		this.ds_bem = ds_bem;
+		this.cdBemId = cdBemId;
+		this.descricaoBem = descricaoBem;
+	}
+
+	public Long getCdBemId() {
+		return this.cdBemId;
+	}
+
+	public void setCdBemId(Long cdBemId) {
+		this.cdBemId = cdBemId;
+	}
+
+	public String getDescricaoBem() {
+		return this.descricaoBem;
+	}
+
+	public void setDescricaoBem(String descricaoBem) {
+		this.descricaoBem = descricaoBem;
 	}
 
 	public Dispositivo getDispositivo() {
-		return dispositivo;
+		return this.dispositivo;
 	}
 
 	public void setDispositivo(Dispositivo dispositivo) {
 		this.dispositivo = dispositivo;
 	}
 
-	public Long getCd_bem() {
-		return cd_bem;
+	public List<BemLog> getBemLogs() {
+		return this.bemLogs;
 	}
 
-	public void setCd_bem(Long cd_bem) {
-		this.cd_bem = cd_bem;
+	public void setBemLogs(List<BemLog> bemLogs) {
+		this.bemLogs = bemLogs;
 	}
 
-	public String getDs_bem() {
-		return ds_bem;
+	public BemLog addBemLog(BemLog bemLog) {
+		getBemLogs().add(bemLog);
+		bemLog.setBem(this);
+
+		return bemLog;
 	}
 
-	public void setDs_bem(String ds_bem) {
-		this.ds_bem = ds_bem;
+	public BemLog removeBemLog(BemLog bemLog) {
+		getBemLogs().remove(bemLog);
+		bemLog.setBem(null);
+
+		return bemLog;
 	}
 
 }
