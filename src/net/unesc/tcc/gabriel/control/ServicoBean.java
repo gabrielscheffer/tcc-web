@@ -36,13 +36,13 @@ public class ServicoBean {
 	@PostConstruct
 	public void inicializar() {
 		System.out.println("Glassfish diz: 'Estou iniciando!'");
-		ultima_consulta = new Date(0);
+		ultima_consulta = null;
 		try {
 			// POPULA DADOS FICTÍCIOS
-			System.out.println("/*********************/");
+			System.out.println("/****************************************************************************/");
 			System.out.println("POPULANDO REGISTROS FICTICIOS...");
 			banco.startbd();
-			System.out.println("/*********************/");
+			System.out.println("/****************************************************************************/");
 		} catch (ParseException e) {
 			e.printStackTrace();
 		}
@@ -143,7 +143,6 @@ public class ServicoBean {
 		}
 	}
 
-	@Asynchronous
 	@Schedule(second = "0", minute = "*/2", hour = "*", persistent = false)
 	public void tarefaAgendada() {
 		ultima_consulta = new Date();

@@ -53,10 +53,10 @@ public class Dispositivo implements Serializable {
 		this.cdDispositivoId = cdDispositivoId;
 		this.dsDispositivo = "BEE" + String.format("%02d", cdDispositivoId);
 		this.dsCoordenadas = dsCoordenadas;
+		this.online = online;
 		if (online){
 			this.dtUltimaOnline = new Date(0);
 		}
-		this.online = online;
 	}
 
 	public Long getCdDispositivoId() {

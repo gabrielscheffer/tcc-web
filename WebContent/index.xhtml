@@ -60,9 +60,11 @@
 				<h2 class="sub-header">Sumário</h2>
 				<div class="table-responsive" style="padding-bottom: 25px;">
 					<h:form id="form">
+						<p:growl id="messages" showDetail="true"/>
+					 	<p:poll id="poll" interval="30" listener="#{tabelaBensBean.bdRefresh}" update="dt_ultima_consulta, pnl:benstableon, pnl:benstableoff"/>
 						<!-- 					MAPA dos BOIS -->
 						<div align="center">
-							<p:gmap center="-28.6749125,-49.3630053" zoom="16" type="HYBRID"
+							<p:gmap id="map" center="-28.6749125,-49.3630053" zoom="16" type="HYBRID"
 								model="#{mapBean.advancedModel}"
 								style="width:1000px;height:350px">
 
@@ -85,25 +87,23 @@
 						</div>
 						<div align="right">
 							Último Nó Discover:
-							<h:outputText value="#{tabelaBensBean.dtUltimaConsulta}">
+							<h:outputText id="dt_ultima_consulta" value="#{tabelaBensBean.dtUltimaConsulta == null ? 'Não há' : tabelaBensBean.dtUltimaConsulta}">
 								<f:convertDateTime pattern="dd/MM/yyyy HH:mm" />
 							</h:outputText>
 						</div>
 						<!-- 					Sumário com as tabelas e filtros -->
-						<div>
-							<p:accordionPanel activeIndex="">
+							<p:accordionPanel activeIndex="" id="pnl">
 								<p:tab titleStyleClass="image-accordion-tab-on"
 									title="Bens Online" titleStyle="text-align:center"
 									style="padding-top: 5px;">
-									<div>
 										<p:dataTable var="bem" value="#{tabelaBensBean.benslistOn}"
 											rowKey="#{bem.cdBemId}" paginator="true" rows="10"
 											selection="#{tabelaBensBean.selectedBemOn}"
 											selectionMode="single"
 											filteredValue="#{tabelaBensBean.filteredBensOn}"
-											id="bensTableOn">
+											id="benstableon">
 
-											<p:ajax event="rowSelect" update=""
+											<p:ajax  event="rowSelect" update=""
 												oncomplete="bemDialogOn.show()" />
 
 											<f:facet name="header">
@@ -163,18 +163,16 @@
 												<!-- 													id="colorOn" /> -->
 											</h:panelGrid>
 										</p:dialog>
-									</div>
 								</p:tab>
 								<p:tab titleStyleClass="image-accordion-tab-off"
 									title="Bens Offline" titleStyle="text-align:center"
 									style="padding-top: 5px;">
-									<div>
 										<p:dataTable var="bem" value="#{tabelaBensBean.benslistOff}"
 											rowKey="#{bem.cdBemId}" paginator="true" rows="10"
 											selection="#{tabelaBensBean.selectedBemOff}"
 											selectionMode="single"
 											filteredValue="#{tabelaBensBean.filteredBensOff}"
-											id="bensTableOff">
+											id="benstableoff">
 
 											<p:ajax event="rowSelect" update=""
 												oncomplete="bemDialogOff.show()" />
@@ -236,10 +234,8 @@
 												<!-- 													id="colorOff" /> -->
 											</h:panelGrid>
 										</p:dialog>
-									</div>
 								</p:tab>
 							</p:accordionPanel>
-						</div>
 						<div class="row placeholders" style="padding-top: 10px;">
 							<div class="col-xs-6 col-sm-3 placeholder">
 								<img src="holder.js/200x200/auto/sky" class="img-responsive"

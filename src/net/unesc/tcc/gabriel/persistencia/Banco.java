@@ -2,11 +2,10 @@ package net.unesc.tcc.gabriel.persistencia;
 
 import java.io.Serializable;
 import java.text.ParseException;
-import java.util.ArrayList;
 import java.util.List;
 
+import javax.annotation.PreDestroy;
 import javax.persistence.EntityManager;
-import javax.persistence.EntityTransaction;
 
 import net.unesc.tcc.gabriel.model.Bem;
 import net.unesc.tcc.gabriel.model.BemLog;
@@ -18,22 +17,32 @@ public class Banco implements Serializable {
 	/**
 	 * 
 	 */
-	private static final long serialVersionUID = -2678650489448917868L;
+	private static final long serialVersionUID = 1L;
+	/**
+	 * 
+	 */
+	
 
+	private EntityManager em = EntityManagerUtil.getEM();
 	public Banco() {
-
+	}
+	
+	@PreDestroy
+	public void closebd(){
+		em.clear();
+		em.close();
 	}
 
 	public List<Bem> recuperartodosBens() {
+		em.clear();
 		System.out.println("Recuperando lista de bens do banco...");
-		EntityManager em = EntityManagerUtil.getEM();
 		List<Bem> lista = em.createQuery("SELECT b FROM Bem b JOIN b.dispositivo d order by b.cdBemId",Bem.class).getResultList();
 		return lista;
 	}
 	
 	public List<Dispositivo> recuperartodosDispositivos(){
+		em.clear();
 		System.out.println("Recuperando lista de dispositivos do banco...");
-		EntityManager em = EntityManagerUtil.getEM();
 		List<Dispositivo> lista = em.createQuery("SELECT d FROM Dispositivo d order by d.cdDispositivoId",Dispositivo.class).getResultList();
 		return lista;
 	}
@@ -49,9 +58,7 @@ public class Banco implements Serializable {
 		if (cdBemId == null){
 			return null;
 		}
-		EntityManager em = EntityManagerUtil.getEM();
 		Bem b = em.find(Bem.class, cdBemId);
-		em.clear();
 		return b;
 	}
 
@@ -60,9 +67,7 @@ public class Banco implements Serializable {
 			return;
 		}
 		System.out.println("Objeto para salvar: " + o);
-		EntityManager em = EntityManagerUtil.getEM();
-		EntityTransaction transacao = em.getTransaction();
-		transacao.begin();
+		em.getTransaction().begin();
 		if (o.getClass().equals(Bem.class)) {
 			Bem b = (Bem) o;
 			b = em.merge(b);
@@ -79,10 +84,19 @@ public class Banco implements Serializable {
 			System.out.println("Classe >> " + o.getClass());
 			
 		}
-		if (transacao.isActive()){
-			transacao.commit();
+		persistbd();
+	}
+	
+	public void excluir(Bem b) {
+		Bem b1 = em.find(Bem.class, b.getCdBemId());
+		if (b1 == null) {
+			System.out.println("Não há Bem " + b.getCdBemId());
+			em.clear();
 		}
-		em.clear();
+		em.getTransaction().begin();
+		em.remove(b1);
+		System.out.println("Bem " + b.getCdBemId() + " excluído!");
+		persistbd();
 	}
 
 	private BemLog geralog(Bem b) {
@@ -108,19 +122,7 @@ public class Banco implements Serializable {
 		return dlog;
 	}
 
-	public void excluir(Bem b) {
-		EntityManager em = EntityManagerUtil.getEM();
-		Bem b1 = em.find(Bem.class, b.getCdBemId());
-		if (b1 == null) {
-			System.out.println("Não há Bem " + b.getCdBemId());
-			em.clear();
-		}
-		EntityTransaction transacao = em.getTransaction();
-		transacao.begin();
-		em.remove(b1);
-		transacao.commit();
-		System.out.println("Bem " + b.getCdBemId() + " excluído!");
-	}
+	
 
 	public void startbd() throws ParseException {
 		// REGISTROS FICTICIOS
@@ -166,10 +168,10 @@ public class Banco implements Serializable {
 		salvar(b);
 	}
 
-	public void closebd() {
-		EntityManager em = EntityManagerUtil.getEM();
+	private void persistbd() {
+		em.flush();
+		em.getTransaction().commit();
 		em.clear();
-		em.close();
 	}
 
 }

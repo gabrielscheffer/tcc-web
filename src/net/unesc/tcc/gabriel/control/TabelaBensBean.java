@@ -15,13 +15,14 @@ import java.util.List;
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
 import javax.faces.bean.ManagedBean;
+import javax.faces.bean.SessionScoped;
 import javax.faces.bean.ViewScoped;
 
 import net.unesc.tcc.gabriel.model.Bem;
 import net.unesc.tcc.gabriel.persistencia.Banco;
 
 @ManagedBean
-@ViewScoped
+@SessionScoped
 public class TabelaBensBean implements Serializable {
 
 	/**
@@ -33,6 +34,7 @@ public class TabelaBensBean implements Serializable {
 	@PostConstruct
 	public void init(){
 		servico.getUltima_consulta();
+		bdRefresh();
 	}
 	
 	private static final long serialVersionUID = 2521222924861033L;
@@ -100,8 +102,7 @@ public class TabelaBensBean implements Serializable {
 
 	}
 
-	@PostConstruct
-	public void bdrefresh() {
+	public void bdRefresh() {
 		Banco banco = new Banco();
 		List<Bem> novalista = banco.recuperartodosBens();
 		if (novalista == null) {
@@ -119,8 +120,10 @@ public class TabelaBensBean implements Serializable {
 		}
 		System.out.println("Online: " + online.size());
 		System.out.println("Offline: " + offline.size());
-		this.benslistOn = online;
-		this.benslistOff = offline;
+		benslistOn = null;
+		benslistOff = null;
+		benslistOn = online;
+		benslistOff = offline;
 	}
 
 }
