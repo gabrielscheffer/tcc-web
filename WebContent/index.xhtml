@@ -50,9 +50,10 @@
 			<div class="col-sm-3 col-md-2 sidebar">
 				<ul class="nav nav-sidebar">
 					<li class="active"><a href="#">Visão Geral</a></li>
-					<li><a href="#">Relatórios</a></li>
-					<li><a href="#">Analíticos</a></li>
-					<li><a href="#">Exportar</a></li>
+					<li><a href="#">Cadastro de Bens</a></li>
+					<li><a href="#">Cadastro de Dispositivos</a></li>
+					<li><a href="#">Cadastro de Torres</a></li>
+					<li><a href="#">Usuários</a></li>
 				</ul>
 			</div>
 			<div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
@@ -60,12 +61,19 @@
 				<h2 class="sub-header">Sumário</h2>
 				<div class="table-responsive" style="padding-bottom: 25px;">
 					<h:form id="form">
-						<p:growl id="messages" showDetail="true"/>
-					 	<p:poll id="poll" interval="30" listener="#{tabelaBensBean.bdRefresh}" update="dt_ultima_consulta, pnl:benstableon, pnl:benstableoff"/>
+						<p:growl id="growl" showDetail="true"/>
+						
+						<div align="right">
+							<p:commandButton id="forcardescnos" actionListener="#{tabelaBensBean.forcardescnos}" value="Forçar Descobrir Novos nós" process="@this" update="growl" />
+						</div>
+						
+						<p:poll id="poll" interval="30"
+							listener="#{tabelaBensBean.bdRefresh}"
+							update="dt_ultima_consulta, pnl:benstableon, pnl:benstableoff" />
 						<!-- 					MAPA dos BOIS -->
 						<div align="center">
-							<p:gmap id="map" center="-28.6749125,-49.3630053" zoom="16" type="HYBRID"
-								model="#{mapBean.advancedModel}"
+							<p:gmap id="map" center="-28.6749125,-49.3630053" zoom="16"
+								type="HYBRID" model="#{mapBean.advancedModel}"
 								style="width:1000px;height:350px">
 
 								<p:ajax event="overlaySelect"
@@ -87,155 +95,158 @@
 						</div>
 						<div align="right">
 							Último Nó Discover:
-							<h:outputText id="dt_ultima_consulta" value="#{tabelaBensBean.dtUltimaConsulta == null ? 'Não há' : tabelaBensBean.dtUltimaConsulta}">
+							<h:outputText id="dt_ultima_consulta"
+								value="#{tabelaBensBean.dtUltimaConsulta == null ? 'Não há' : tabelaBensBean.dtUltimaConsulta}">
 								<f:convertDateTime pattern="dd/MM/yyyy HH:mm" />
 							</h:outputText>
 						</div>
 						<!-- 					Sumário com as tabelas e filtros -->
-							<p:accordionPanel activeIndex="" id="pnl">
-								<p:tab titleStyleClass="image-accordion-tab-on"
-									title="Bens Online" titleStyle="text-align:center"
-									style="padding-top: 5px;">
-										<p:dataTable var="bem" value="#{tabelaBensBean.benslistOn}"
-											rowKey="#{bem.cdBemId}" paginator="true" rows="10"
-											selection="#{tabelaBensBean.selectedBemOn}"
-											selectionMode="single"
-											filteredValue="#{tabelaBensBean.filteredBensOn}"
-											id="benstableon">
+						<p:accordionPanel activeIndex="" id="pnl">
+							<p:tab titleStyleClass="image-accordion-tab-on"
+								title="Bens Online" titleStyle="text-align:center"
+								style="padding-top: 5px;">
+								<p:dataTable var="bem" value="#{tabelaBensBean.benslistOn}"
+									rowKey="#{bem.cdBemId}" paginator="true" rows="10"
+									selection="#{tabelaBensBean.selectedBemOn}"
+									selectionMode="single"
+									filteredValue="#{tabelaBensBean.filteredBensOn}"
+									id="benstableon">
 
-											<p:ajax  event="rowSelect" update=""
-												oncomplete="bemDialogOn.show()" />
+									<p:ajax event="rowSelect" update=""
+										oncomplete="bemDialogOn.show()" />
 
-											<f:facet name="header">
+									<f:facet name="header">
 						            		Lista de Bois Online
 						        </f:facet>
-											<p:column headerText="Bem" sortBy="descricaoBem"
-												filterBy="descricaoBem" id="descricaoBem">
+									<p:column headerText="Bem" sortBy="descricaoBem"
+										filterBy="descricaoBem" id="descricaoBem">
 						            		#{bem.descricaoBem}
 						        </p:column>
 
-											<p:column headerText="Dispositivo" sortBy="dsDispositivo"
-												filterBy="dsDispositivo" id="dsDispositivo">
+									<p:column headerText="Dispositivo" sortBy="dsDispositivo"
+										filterBy="dsDispositivo" id="dsDispositivo">
 											#{bem.dispositivo.dsDispositivo}
 						        </p:column>
 
-											<p:column headerText="Coordenadas" sortBy="dsCoordenadas"
-												filterBy="dsCoordenadas" id="dsCoordenadas">
+									<p:column headerText="Coordenadas" sortBy="dsCoordenadas"
+										filterBy="dsCoordenadas" id="dsCoordenadas">
 											#{bem.dispositivo.dsCoordenadas}
 						        </p:column>
 
-											<p:column headerText="Última Data/Hora Online" sortBy="dtUltimaOnline"
-												filterBy="dtUltimaOnline" id="dtUltimaOnline">
-												<h:outputText value="#{bem.dispositivo.dtUltimaOnline}">
-													<f:convertDateTime pattern="dd/MM/yyyy HH:mm" />
-												</h:outputText>
+									<p:column headerText="Última Data/Hora Online"
+										sortBy="dtUltimaOnline" filterBy="dtUltimaOnline"
+										id="dtUltimaOnline">
+										<h:outputText value="#{bem.dispositivo.dtUltimaOnline}">
+											<f:convertDateTime pattern="dd/MM/yyyy HH:mm" />
+										</h:outputText>
 
-											</p:column>
+									</p:column>
 
-										</p:dataTable>
+								</p:dataTable>
 
-										<p:dialog id="online" header="Detalhes Bem"
-											widgetVar="bemDialogOn" resizable="false" width="200"
-											showEffect="fade" hideEffect="fade">
+								<p:dialog id="online" header="Detalhes Bem"
+									widgetVar="bemDialogOn" resizable="false" width="200"
+									showEffect="fade" hideEffect="fade">
 
-											<h:panelGrid id="displayOn" columns="2" cellpadding="4">
+									<h:panelGrid id="displayOn" columns="2" cellpadding="4">
 
-												<!-- 												<f:facet name="header"> -->
-												<!-- 													<p:graphicImage -->
-												<!-- 														value="/images/cars/#{tabelabensbean.selectedCar.manufacturer}.jpg" /> -->
-												<!-- 												</f:facet> -->
+										<!-- 												<f:facet name="header"> -->
+										<!-- 													<p:graphicImage -->
+										<!-- 														value="/images/cars/#{tabelabensbean.selectedCar.manufacturer}.jpg" /> -->
+										<!-- 												</f:facet> -->
 
-												<!-- 												<h:outputText value="Model:" /> -->
-												<!-- 												<h:outputText value="#{tabelabensbean.selectedCar.model}" -->
-												<!-- 													id="modelOn" /> -->
+										<!-- 												<h:outputText value="Model:" /> -->
+										<!-- 												<h:outputText value="#{tabelabensbean.selectedCar.model}" -->
+										<!-- 													id="modelOn" /> -->
 
-												<!-- 												<h:outputText value="Year:" /> -->
-												<!-- 												<h:outputText value="#{tabelabensbean.selectedCar.year}" -->
-												<!-- 													id="yearOn" /> -->
+										<!-- 												<h:outputText value="Year:" /> -->
+										<!-- 												<h:outputText value="#{tabelabensbean.selectedCar.year}" -->
+										<!-- 													id="yearOn" /> -->
 
-												<!-- 												<h:outputText value="Manufacturer:" /> -->
-												<!-- 												<h:outputText -->
-												<!-- 													value="#{tabelabensbean.selectedCar.manufacturer}" -->
-												<!-- 													id="manufacturerOn" /> -->
+										<!-- 												<h:outputText value="Manufacturer:" /> -->
+										<!-- 												<h:outputText -->
+										<!-- 													value="#{tabelabensbean.selectedCar.manufacturer}" -->
+										<!-- 													id="manufacturerOn" /> -->
 
-												<!-- 												<h:outputText value="Color:" /> -->
-												<!-- 												<h:outputText value="#{tabelabensbean.selectedCar.color}" -->
-												<!-- 													id="colorOn" /> -->
-											</h:panelGrid>
-										</p:dialog>
-								</p:tab>
-								<p:tab titleStyleClass="image-accordion-tab-off"
-									title="Bens Offline" titleStyle="text-align:center"
-									style="padding-top: 5px;">
-										<p:dataTable var="bem" value="#{tabelaBensBean.benslistOff}"
-											rowKey="#{bem.cdBemId}" paginator="true" rows="10"
-											selection="#{tabelaBensBean.selectedBemOff}"
-											selectionMode="single"
-											filteredValue="#{tabelaBensBean.filteredBensOff}"
-											id="benstableoff">
+										<!-- 												<h:outputText value="Color:" /> -->
+										<!-- 												<h:outputText value="#{tabelabensbean.selectedCar.color}" -->
+										<!-- 													id="colorOn" /> -->
+									</h:panelGrid>
+								</p:dialog>
+							</p:tab>
+							<p:tab titleStyleClass="image-accordion-tab-off"
+								title="Bens Offline" titleStyle="text-align:center"
+								style="padding-top: 5px;">
+								<p:dataTable var="bem" value="#{tabelaBensBean.benslistOff}"
+									rowKey="#{bem.cdBemId}" paginator="true" rows="10"
+									selection="#{tabelaBensBean.selectedBemOff}"
+									selectionMode="single"
+									filteredValue="#{tabelaBensBean.filteredBensOff}"
+									id="benstableoff">
 
-											<p:ajax event="rowSelect" update=""
-												oncomplete="bemDialogOff.show()" />
+									<p:ajax event="rowSelect" update=""
+										oncomplete="bemDialogOff.show()" />
 
-											<f:facet name="header">
+									<f:facet name="header">
 						            		Lista de Bois Offline
 						        </f:facet>
-											<p:column headerText="Bem" sortBy="descricaoBem"
-												filterBy="descricaoBem" id="descricaoBem">
+									<p:column headerText="Bem" sortBy="descricaoBem"
+										filterBy="descricaoBem" id="descricaoBem">
 						            		#{bem.descricaoBem}
 						        </p:column>
 
-											<p:column headerText="Dispositivo" sortBy="dsDispositivo"
-												filterBy="dsDispositivo" id="dsDispositivo">
+									<p:column headerText="Dispositivo" sortBy="dsDispositivo"
+										filterBy="dsDispositivo" id="dsDispositivo">
 											#{bem.dispositivo.dsDispositivo}
 						        </p:column>
 
-											<p:column headerText="Coordenadas" sortBy="dsCoordenadas"
-												filterBy="dsCoordenadas" id="dsCoordenadas">
+									<p:column headerText="Coordenadas" sortBy="dsCoordenadas"
+										filterBy="dsCoordenadas" id="dsCoordenadas">
 											#{bem.dispositivo.dsCoordenadas}
 						        </p:column>
 
-											<p:column headerText="Última Data/Hora Online" sortBy="dtUltimaOnline"
-												filterBy="dtUltimaOnline" id="dtUltimaOnline">
-												<h:outputText value="#{bem.dispositivo.dtUltimaOnline}">
-													<f:convertDateTime pattern="dd/MM/yyyy HH:mm" />
-												</h:outputText>
+									<p:column headerText="Última Data/Hora Online"
+										sortBy="dtUltimaOnline" filterBy="dtUltimaOnline"
+										id="dtUltimaOnline">
+										<h:outputText value="#{bem.dispositivo.dtUltimaOnline}">
+											<f:convertDateTime pattern="dd/MM/yyyy HH:mm" />
+										</h:outputText>
 
-											</p:column>
+									</p:column>
 
-										</p:dataTable>
+								</p:dataTable>
 
-										<p:dialog id="offline" header="Detalhes Bem"
-											widgetVar="bemDialogOff" resizable="false" width="200"
-											showEffect="fade" hideEffect="fade">
+								<p:dialog id="offline" header="Detalhes Bem"
+									widgetVar="bemDialogOff" resizable="false" width="200"
+									showEffect="fade" hideEffect="fade">
 
-											<h:panelGrid id="displayOff" columns="2" cellpadding="4">
+									<h:panelGrid id="displayOff" columns="2" cellpadding="4">
 
-												<!-- 												<f:facet name="header"> -->
-												<!-- 													<p:graphicImage -->
-												<!-- 														value="/images/cars/#{tabelabensbean.selectedCar.manufacturer}.jpg" /> -->
-												<!-- 												</f:facet> -->
+										<!-- 												<f:facet name="header"> -->
+										<!-- 													<p:graphicImage -->
+										<!-- 														value="/images/cars/#{tabelabensbean.selectedCar.manufacturer}.jpg" /> -->
+										<!-- 												</f:facet> -->
 
-												<!-- 												<h:outputText value="Model:" /> -->
-												<!-- 												<h:outputText value="#{tabelabensbean.selectedCar.model}" -->
-												<!-- 													id="modelOff" /> -->
+										<!-- 												<h:outputText value="Model:" /> -->
+										<!-- 												<h:outputText value="#{tabelabensbean.selectedCar.model}" -->
+										<!-- 													id="modelOff" /> -->
 
-												<!-- 												<h:outputText value="Year:" /> -->
-												<!-- 												<h:outputText value="#{tabelabensbean.selectedCar.year}" -->
-												<!-- 													id="yearOff" /> -->
+										<!-- 												<h:outputText value="Year:" /> -->
+										<!-- 												<h:outputText value="#{tabelabensbean.selectedCar.year}" -->
+										<!-- 													id="yearOff" /> -->
 
-												<!-- 												<h:outputText value="Manufacturer:" /> -->
-												<!-- 												<h:outputText -->
-												<!-- 													value="#{tabelabensbean.selectedCar.manufacturer}" -->
-												<!-- 													id="manufacturerOff" /> -->
+										<!-- 												<h:outputText value="Manufacturer:" /> -->
+										<!-- 												<h:outputText -->
+										<!-- 													value="#{tabelabensbean.selectedCar.manufacturer}" -->
+										<!-- 													id="manufacturerOff" /> -->
 
-												<!-- 												<h:outputText value="Color:" /> -->
-												<!-- 												<h:outputText value="#{tabelabensbean.selectedCar.color}" -->
-												<!-- 													id="colorOff" /> -->
-											</h:panelGrid>
-										</p:dialog>
-								</p:tab>
-							</p:accordionPanel>
+										<!-- 												<h:outputText value="Color:" /> -->
+										<!-- 												<h:outputText value="#{tabelabensbean.selectedCar.color}" -->
+										<!-- 													id="colorOff" /> -->
+									</h:panelGrid>
+								</p:dialog>
+							</p:tab>
+						</p:accordionPanel>
 						<div class="row placeholders" style="padding-top: 10px;">
 							<div class="col-xs-6 col-sm-3 placeholder">
 								<img src="holder.js/200x200/auto/sky" class="img-responsive"

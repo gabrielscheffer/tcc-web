@@ -14,9 +14,11 @@ import java.util.List;
 
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
+import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
 import javax.faces.bean.ViewScoped;
+import javax.faces.context.FacesContext;
 
 import net.unesc.tcc.gabriel.model.Bem;
 import net.unesc.tcc.gabriel.persistencia.Banco;
@@ -99,7 +101,14 @@ public class TabelaBensBean implements Serializable {
 	}
 
 	public void forcardescnos() {
-
+		addMensagem("Comando enviado para o servidor!");
+		servico.tarefaAgendada();
+		addMensagem("Comando concluído!");
+	}
+	
+	private void addMensagem(String msg){
+		FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Atenção",  msg);
+        FacesContext.getCurrentInstance().addMessage(null, message);
 	}
 
 	public void bdRefresh() {
@@ -109,7 +118,7 @@ public class TabelaBensBean implements Serializable {
 			System.out.println("Lista nula!");
 			return;
 		}
-		System.out.println("Retornado: " + novalista.size());
+		System.out.println("Bens retornados: " + novalista.size());
 		List<Bem> online = new ArrayList<Bem>(), offline = new ArrayList<Bem>();
 		for (Bem b : novalista) {
 			if (b.getDispositivo().isOnline()) {
@@ -118,8 +127,8 @@ public class TabelaBensBean implements Serializable {
 				offline.add(b);
 			}
 		}
-		System.out.println("Online: " + online.size());
-		System.out.println("Offline: " + offline.size());
+		System.out.println("Bens Online: " + online.size());
+		System.out.println("Bens Offline: " + offline.size());
 		benslistOn = null;
 		benslistOff = null;
 		benslistOn = online;

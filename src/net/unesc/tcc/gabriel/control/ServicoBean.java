@@ -101,11 +101,15 @@ public class ServicoBean {
 		List<Dispositivo> disponlist = consultaDispositivos(), dispbancolist, dispofflist = new ArrayList<>();
 
 		if (disponlist == null || disponlist.size() < 1) {
+			System.out.println("Lista de Dispositivos do Zigbee nula ou vazia!");
 			return;
 		}
 
 		// CRUZA LISTA DO BANCO COM LISTA DE ENCONTRADOS -- MELHORAR ISSO
 		dispbancolist = banco.recuperartodosDispositivos();
+		if (dispbancolist == null || dispbancolist.size() < 1){
+			System.out.println("Lista de Dispositivos do banco nula ou vazia!");
+		}
 		for (Dispositivo d : dispbancolist) {
 			if (d.isOnline()) {
 				boolean encontrado = false;
@@ -121,6 +125,9 @@ public class ServicoBean {
 			}
 		}
 		// SETA OFFLINE para os dispositivos não encontrados que estavam ON
+		if (dispofflist == null || dispofflist.size() < 1){
+			System.out.println("--Lista de Dispositivos offline nula ou vazia.");
+		}
 		for (Dispositivo doff : dispofflist) {
 			System.out.println("Dispositivo: " + doff.getDsDispositivo() + " ("	+ doff + ") está OFFLINE!");
 			doff.setOnline(false);
@@ -128,6 +135,9 @@ public class ServicoBean {
 		}
 		int i = 1;
 		// SALVA NOVOS DISPOSITIVOS ENCONTRADOS
+		if (disponlist == null || disponlist.size() < 1){
+			System.out.println("--Lista de Dispositivos online nula ou vazia.");
+		}
 		for (Dispositivo d : disponlist) {
 			banco.salvar(d);
 			if (d.getFirmware().compareToIgnoreCase("COORDINATOR") == 0) {
