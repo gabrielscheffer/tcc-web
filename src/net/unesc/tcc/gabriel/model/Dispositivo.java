@@ -32,7 +32,7 @@ public class Dispositivo implements Serializable {
 	@Column(name = "dt_ultima_online")
 	private Date dtUltimaOnline;
 
-	private String firmware = "ROUTER";
+	private String firmware = "END_DEVICE";
 
 	private String marca = "DIGI";
 
